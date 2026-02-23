@@ -33,6 +33,7 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
         "/../",
       locales: ["ar", "es", "hi", "zh"],
     });
+    // sets default parameters
     this.counter =0
     this.min = 10;
     this.max = 25;
@@ -48,7 +49,7 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
     };
   }
 
-  // Lit scoped styles
+  // Lit scoped styles, making sure to use penn state DDD colors and templates
   static get styles() {
     return [
       super.styles,
@@ -101,7 +102,7 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
     ];
   }
 
-
+// changes the color to penn state themed when certain numbers are hit
   get numberColor() {
     if (this.counter === this.min || this.counter === this.max) {
       return "var(--ddd-theme-default-inventOrange)";
@@ -114,15 +115,15 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
     }
     return "var(--ddd-theme-primary)";
   }
-
+/* sets counter display, programs increment and decrement buttons, uses slot for flexible html*/
   render() {
     return html`
       <confetti-container id="confetti">
         <div class="wrapper">
-          <h3 style="color:${this.numberColor}">${this.counter}</h3>
+          <h3 style="color:${this.numberColor}">${this.counter}</h3> 
           <div class="buttons">
             <button
-              @click=${this.decrement}
+              @click=${this.decrement} 
               ?disabled=${this.min === this.counter}
             >
               -
@@ -141,29 +142,29 @@ export class CounterApp extends DDDSuper(I18NMixin(LitElement)) {
   }
 
   increment() {
-    if (this.counter < this.max) {
+    if (this.counter < this.max) { // if the number is below the max, it will increment 1
       this.counter++;
     }
   }
 
   decrement() {
-    if (this.counter > this.min) {
+    if (this.counter > this.min) { //if the number is above the min, it will continue decreasing
       this.counter--;
     }
   }
 
-  updated(changedProperties) {
+  updated(changedProperties) { //used to detect when the counter changes
     if (super.updated) {
       super.updated(changedProperties);
     }
-    if (changedProperties.has("counter")) {
+    if (changedProperties.has("counter")) { //when 21 is hit, the confetti goes off
       if (this.counter === 21) {
         this.makeItRain();
       }
     }
   }
 
-  makeItRain() {
+  makeItRain() { //confetti container 
     import("@haxtheweb/multiple-choice/lib/confetti-container.js").then(
       (module) => {
         setTimeout(() => {
